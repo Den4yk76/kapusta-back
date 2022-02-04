@@ -1,10 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
-
-// const testRouter = (req, res, next) => {
-//   res.status(200).json({ status: 'success' });
-// };
+import authRouter from './routes/api/auth';
 
 const app = express();
 
@@ -14,7 +11,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// app.use('/test', testRouter);
+app.use('/api/users', authRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
