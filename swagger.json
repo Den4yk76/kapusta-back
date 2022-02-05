@@ -107,18 +107,8 @@
           }
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LoginResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Email or password is wrong",
             "content": {}
           }
         }
@@ -129,7 +119,7 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["email", "password", "name"],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -140,15 +130,40 @@
             "type": "string",
             "description": "User's password",
             "example": "qwerty123"
-          },
-          "name": {
-            "type": "string",
-            "description": "User's password",
-            "example": "User Name"
           }
         }
       },
       "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            }
+          }
+        },
+        "example":{ "email": "user@gmail.com"}
+      },
+      "LoginRequest": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User's email",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password",
+          "example": "qwerty123"
+        }
+      }
+      },
+      "LoginResponse": {
         "type": "array",
         "items": {
           "type": "object",
@@ -172,46 +187,22 @@
         },
         "example":{ "email": "user@gmail.com", "userId": "1", "token": "jwtToken"}
       },
-      "LoginRequest": {
+      "LogoutRequest": {
       "type": "object",
-      "required": ["email", "password"],
+      "required": ["id", "token"],
       "properties": {
         "email": {
           "type": "string",
           "description": "User's email",
-          "format": "email"
+          "example": "1"
         },
-        "password": {
+        "token": {
           "type": "string",
-          "description": "User's password",
-          "example": "qwerty123"
+          "description": "jwt token",
+          "example": "null"
         }
       }
-    },
-    "LoginResponse": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "userId": {
-            "type": "string",
-            "description": "User's id",
-            "example": "32143232436545474"
-          },
-          "token": {
-            "type": "string",
-            "description": "token",
-            "example": "jwtToken"
-          }
-        }
-      },
-      "example":{ "email": "user@gmail.com", "userId": "1", "token": "jwtToken"}
-    }
+      }
     },
     "securitySchemes": {
       "Bearer": {
