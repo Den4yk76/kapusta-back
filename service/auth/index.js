@@ -10,6 +10,10 @@ class AuthService {
     const { email } = await Users.create(body);
     return { email };
   }
+
+  async setToken(id, token) {
+    await Users.updateToken(id, token);
+  }
 }
 
 export default AuthService;
