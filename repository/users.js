@@ -1,5 +1,9 @@
 import User from '../model/user';
 
+const findById = async id => {
+  return await User.findById(id);
+};
+
 const findByEmail = async email => {
   return await User.findOne({ email });
 };
@@ -14,6 +18,7 @@ const updateToken = async (id, token) => {
 };
 
 export default {
+  findById,
   findByEmail,
   create,
   updateToken,

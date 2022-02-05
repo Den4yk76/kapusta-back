@@ -32,7 +32,6 @@ const login = async (req, res, next) => {
       .json({ message: 'Email or password is wrong' });
   };
 
-
   const token = await authService.getToken(user);
   await authService.setToken(user.id, token);
 
@@ -46,4 +45,14 @@ const login = async (req, res, next) => {
     .status(HttpCode.OK)
     .json(response);
 };
-export { registration, login };
+
+const logout = async (req, res, next) => {
+  await authService.setToken(req.user.id, null);
+  res.status(HttpCode.NO_CONTENT).json({
+    status: 'success',
+    code: HttpCode.NO_CONTENT,
+    data: {},
+  });
+};
+
+export { registration, login, logout };
