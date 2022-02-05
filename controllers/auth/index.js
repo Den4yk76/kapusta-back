@@ -22,4 +22,37 @@ const registration = async (req, res, next) => {
   });
 };
 
-export { registration };
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await authService.getUser(email, password);
+
+  if (!user) {
+    return res
+      .status(HttpCode.UNAUTHORIZED)
+      .json({ message: 'Email or password is wrong' });
+  };
+
+  const token = await authService.getToken(user);
+  await authService.setToken(user.id, token);
+
+  const response = {
+    "token": token,
+    "user": {
+      "email": user.email
+    }
+  }
+  res
+    .status(HttpCode.OK)
+    .json(response);
+};
+
+const logout = async (req, res, next) => {
+  await authService.setToken(req.user.id, null);
+  res.status(HttpCode.NO_CONTENT).json({
+    status: 'success',
+    code: HttpCode.NO_CONTENT,
+    data: {},
+  });
+};
+
+export { registration, login, logout };
