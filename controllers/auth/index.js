@@ -30,20 +30,18 @@ const login = async (req, res, next) => {
     return res
       .status(HttpCode.UNAUTHORIZED)
       .json({ message: 'Email or password is wrong' });
-  };
+  }
 
   const token = await authService.getToken(user);
   await authService.setToken(user.id, token);
 
   const response = {
-    "token": token,
-    "user": {
-      "email": user.email
-    }
-  }
-  res
-    .status(HttpCode.OK)
-    .json(response);
+    token: token,
+    user: {
+      email: user.email,
+    },
+  };
+  res.status(HttpCode.OK).json(response);
 };
 
 const logout = async (req, res, next) => {

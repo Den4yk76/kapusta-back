@@ -28,9 +28,7 @@
         "tags": ["Registration"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
           "required": true,
           "content": {
             "application/json": {
@@ -42,7 +40,7 @@
         },
         "responses": {
           "201": {
-            "description": "Successful operation",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
@@ -51,12 +49,76 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
           "409": {
-            "description": "Provided email already exists",
+            "description": "Email in use",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Login"],
+        "summary": "User log in",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password is wrong",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": ["Logout"],
+        "summary": "User log out",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password is wrong",
             "content": {}
           }
         }
@@ -67,7 +129,7 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["email", "password", "name"],
         "properties": {
           "email": {
             "type": "string",
@@ -78,6 +140,11 @@
             "type": "string",
             "description": "User's password",
             "example": "qwerty123"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's password",
+            "example": "User Name"
           }
         }
       },
@@ -92,17 +159,59 @@
               "format": "email"
             },
             "userId": {
-              "type": "number",
+              "type": "string",
               "description": "User's id",
               "example": "32143232436545474"
+            },
+            "token": {
+              "type": "string",
+              "description": "token",
+              "example": "jwtToken"
             }
           }
         },
-        "example": [
-          { "email": "1@gmail.com", "userId": "1" },
-          { "email": "2@gmail.com", "userId": "2" }
-        ]
+        "example":{ "email": "user@gmail.com", "userId": "1", "token": "jwtToken"}
+      },
+      "LoginRequest": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User's email",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password",
+          "example": "qwerty123"
+        }
       }
+    },
+    "LoginResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User's id",
+            "example": "32143232436545474"
+          },
+          "token": {
+            "type": "string",
+            "description": "token",
+            "example": "jwtToken"
+          }
+        }
+      },
+      "example":{ "email": "user@gmail.com", "userId": "1", "token": "jwtToken"}
+    }
     },
     "securitySchemes": {
       "Bearer": {
@@ -112,5 +221,4 @@
       }
     }
   }
-  
 }
