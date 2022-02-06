@@ -1,7 +1,15 @@
 import Income from '../model/income';
 
 const createIncome = () => {
-    //to do Zmennn
-}
+  //to do Zmennn
+};
 
-export default { createIncome }
+const deleteIncome = (userId, incomeId) => {
+  const result = Income.findOneAndRemove({
+    _id: incomeId,
+    owner: userId,
+  });
+  return result;
+};
+
+export default { createIncome, deleteIncome };
