@@ -5,7 +5,6 @@ import authRouter from './routes/api/auth';
 import operationsRouter from './routes/api/operations';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './swagger.json';
-import authRouter from './routes/api/auth';
 
 const app = express();
 
