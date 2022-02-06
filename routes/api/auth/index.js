@@ -9,5 +9,4 @@ router.post('/signup', validateAuth, registration);
 router.post('/login', validateAuth, login);
 router.post('/logout', guard, logout);
 
-
 export default router;

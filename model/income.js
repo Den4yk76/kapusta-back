@@ -26,7 +26,7 @@ const incomeSchema = new Schema(
             type: String,
             required: true,
         },
-        text: {
+        description: {
             type: String,
             default: "",
         },
