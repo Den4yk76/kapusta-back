@@ -46,11 +46,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   await authService.setToken(req.user.id, null);
-  res.status(HttpCode.NO_CONTENT).json({
-    status: 'success',
-    code: HttpCode.NO_CONTENT,
-    data: {},
-  });
+  res.status(HttpCode.NO_CONTENT).json();
 };
 
 export { registration, login, logout };

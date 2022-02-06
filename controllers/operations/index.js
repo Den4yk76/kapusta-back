@@ -46,4 +46,24 @@ const changeBalance = async (req, res, next) => {
   });
 };
 
-export { addIncome, changeBalance };
+const deleteIncome = async (req, res, next) => {
+  const { id: incomeId } = req.params;
+  const { id: userId } = req.user;
+  const income = await operationsService.deleteIncome(userId, incomeId);
+
+  if (!income) {
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: 'error',
+      code: HttpCode.NOT_FOUND,
+      message: 'Not Found',
+    });
+  } else {
+    res.status(HttpCode.OK).json({
+      status: 'success',
+      code: HttpCode.OK,
+      user: { income },
+    });
+  }
+};
+
+export { addIncome, deleteIncome, changeBalance };
