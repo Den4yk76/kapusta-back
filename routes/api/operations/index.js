@@ -1,8 +1,11 @@
 import { Router } from 'express';
-import { updateBalance } from '../../../controllers/operations';
+import { addIncome, changeBalance } from '../../../controllers/operations';
+import { validateAddIncome } from './validation';
+import guard from '../../../middlewares/guard';
 
 const router = new Router();
 
-router.patch('./balance', updateBalance);
+router.post('/income', guard, validateAddIncome, addIncome);
+router.patch('/balance', guard, changeBalance);
 
 export default router;
