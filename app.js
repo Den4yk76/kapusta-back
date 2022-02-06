@@ -16,7 +16,7 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use('/api/users', authRouter);
-app.use('/api/income', operationsRouter);
+app.use('/api/operations', operationsRouter); // Denys изменил эту строчку. Было так - app.use('/api/income', operationsRouter);
 
 
 app.use((req, res) => {
