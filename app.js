@@ -4,7 +4,6 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './swagger.json';
 import authRouter from './routes/api/auth';
-import userOperations from './routes/api/operations';
 
 const app = express();
 
@@ -16,7 +15,6 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use('/api/users', authRouter);
-app.use('/api/operations', userOperations);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
