@@ -1,5 +1,6 @@
 import { HttpCode } from '../../lib/constants.js';
 import OperationsService from '../../service/operations/';
+import repository from '../../repository/operations';
 const operationsService = new OperationsService();
 
 const addIncome = async (req, res, next) => {
@@ -29,6 +30,22 @@ const addIncome = async (req, res, next) => {
   });
 };
 
+const changeBalance = async (req, res, next) => {
+  const { id } = req.user;
+  const user = await repository.updateBalance(id, req.body);
+  if (!user) {
+    return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
+  }
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    user: {
+      id,
+      balance: user.balance,
+    },
+  });
+};
+
 const deleteIncome = async (req, res, next) => {
   const { id: incomeId } = req.params;
   const { id: userId } = req.user;
@@ -49,4 +66,4 @@ const deleteIncome = async (req, res, next) => {
   }
 };
 
-export { addIncome, deleteIncome };
+export { addIncome, deleteIncome, changeBalance };

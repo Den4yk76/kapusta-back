@@ -1,7 +1,12 @@
 import Income from '../model/income';
+import User from '../model/user';
 
 const createIncome = () => {
   //to do Zmennn
+};
+
+const updateBalance = async (id, body) => {
+  return User.findOneAndUpdate({ _id: id }, { ...body }, { new: true });
 };
 
 const deleteIncome = (userId, incomeId) => {
@@ -12,4 +17,4 @@ const deleteIncome = (userId, incomeId) => {
   return result;
 };
 
-export default { createIncome, deleteIncome };
+export default { createIncome, deleteIncome, updateBalance };
