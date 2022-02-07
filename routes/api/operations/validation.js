@@ -3,7 +3,7 @@ import { HttpCode } from '../../../lib/constants.js';
 
 
 const addIncomeSchema = Joi.object({
-    email: Joi.string().email().required(),
+
     time: Joi.string().max(100).required(),
     count: Joi.string().max(100).required(),
     category: Joi.string().max(1000).required(),
