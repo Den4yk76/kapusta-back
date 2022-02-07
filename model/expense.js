@@ -7,12 +7,9 @@ const expenseSchema = new Schema(
     {
         owner: {
             type: String,
-            required: [true, 'missing mail in data(database)'],
+            required: true,
             unique: false,
-            validate(value) {
-                const re = /\S+@\S+\.\S+/;
-                return re.test(String(value).trim().toLowerCase());
-            },
+
         },
         time: {
             type: String,

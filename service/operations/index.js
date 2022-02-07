@@ -2,12 +2,10 @@ import repositoryOperations from '../../repository/operations';
 import repositoryUsers from '../../repository/users';
 
 class OperationsService {
-  async changeBalance() {
-    //to do Zmennn
-  }
 
-  async addIncome() {
-    //to do Zmennn
+
+  async addIncomeObject(id, body) {
+    const addIncomeObj = await repositoryOperations.createIncome({ owner: id, ...{ body } })
   }
 
   async deleteIncome(userId, incomeId) {
