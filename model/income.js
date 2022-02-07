@@ -7,7 +7,7 @@ const incomeSchema = new Schema(
     {
         owner: {
             type: String,
-            required: [true, 'missing user in data(database)'],
+            required: true,
             unique: false
         },
         time: {
