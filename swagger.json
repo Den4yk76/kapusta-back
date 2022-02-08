@@ -11,25 +11,11 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3001" }],
-  "tags": [
-    {
-      "name": "Registration",
-      "description": "Registration endpoints"
-    },
-    {
-      "name": "Login",
-      "description": "Login endpoints"
-    },
-     {
-      "name": "Logout",
-      "description": "Logout endpoints"
-    }
-  ],
+  "servers": [{ "url": "http://localhost:3001",  "description": "API base URL" }],
   "paths": {
     "/api/users/signup": {
       "post": {
-        "tags": ["Registration"],
+        "tags": ["User"],
         "summary": "User registration",
         "parameters": [],
         "requestBody": {
@@ -62,7 +48,7 @@
     },
     "/api/users/login": {
       "post": {
-        "tags": ["Login"],
+        "tags": ["User"],
         "summary": "User log in",
         "parameters": [],
         "security": [{ "Bearer": [] }],
@@ -96,7 +82,7 @@
     },
     "/api/users/logout": {
       "post": {
-        "tags": ["Logout"],
+        "tags": ["User"],
         "summary": "User log out",
         "parameters": [],
         "security": [{ "Bearer": [] }],
@@ -114,10 +100,66 @@
           "204": {
             "description": "Success",
             "content": {}
-          },
-          "401": {
-            "description": "Not authorized",
-            "content": {} 
+          }
+        }
+      }
+    },
+    "/api/operations/balance": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateBalanceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/operations/income": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "income transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomeTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeTransactionResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -176,21 +218,21 @@
         }
       },
       "LoginRequest": {
-      "type": "object",
-      "required": ["email", "password"],
-      "properties": {
-        "email": {
-          "type": "string",
-          "description": "User's email",
-          "format": "email",
-          "example": "user@meta.ua"
-        },
-        "password": {
-          "type": "string",
-          "description": "User's password",
-          "example": "12345678"
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "user@meta.ua"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "12345678"
+          }
         }
-      }
       },
       "LoginResponse": {
         "type": "object",
@@ -211,7 +253,6 @@
               }
             }
           }
-          
         },
         "example": {
           "token": "jwtToken",
@@ -235,7 +276,37 @@
             "example": "jwtToken"
           }
         }
-      }
+      }, 
+      "UpdateBalanceRequest": {
+        "type": "object",
+        "required": ["balance"],
+        "properties": {
+          "balance": {
+            "type": "string",
+            "description": "User's balance",
+            "example": "10000"
+          }
+        }
+      },
+      "UpdateBalanceResponse": {
+        "type": "object",
+        "required": ["balance"],
+        "properties": {
+          "balance": {
+            "type": "string",
+            "description": "User's balance",
+            "example": "10000"
+          }
+        },
+        "example":{ 
+          "status": "success",
+          "code": 200,
+          "user": {
+            "balance": "10000"
+          }
+        }
+      },
+      "IncomeTransactionRequest": {}
     },
     "securitySchemes": {
       "Bearer": {
