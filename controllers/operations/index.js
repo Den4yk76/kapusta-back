@@ -33,14 +33,10 @@ const addIncome = async (req, res, next) => {
 const changeBalance = async (req, res, next) => {
   const { id } = req.user;
   const user = await repository.updateBalance(id, req.body);
-  if (!user) {
-    return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
-  }
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
     user: {
-      id,
       balance: user.balance,
     },
   });
