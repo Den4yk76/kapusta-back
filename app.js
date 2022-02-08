@@ -5,6 +5,7 @@ import authRouter from './routes/api/auth';
 import operationsRouter from './routes/api/operations';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './swagger.json';
+import { test } from './lib/arr';
 
 const app = express();
 
@@ -26,4 +27,15 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
+test.map(el => {
+  const time = Number(el.time);
+  const res = new Date(time);
+  const month = res.getMonth();
+  console.log(month);
+});
+
+const f = test.filter(el => {
+  const time = Number(el.time);
+  const res = new Date(time);
+});
 export default app;
