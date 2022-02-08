@@ -1,7 +1,7 @@
 import { HttpCode } from '../../lib/constants.js';
 import OperationsService from '../../service/operations/';
 import repository from '../../repository/operations';
-import usersRepository from '../../repository/users'
+import usersRepository from '../../repository/users';
 const operationsService = new OperationsService();
 
 const addIncome = async (req, res, next) => {
@@ -14,7 +14,7 @@ const addIncome = async (req, res, next) => {
   const user = await repository.updateBalance(id, { balance: currentBalance });
   if (!user) {
     return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
-  };
+  }
   // const newBalance = await repository.updateBalance(id, { count });
   // if (!newBalance) {
   //   return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
@@ -37,7 +37,7 @@ const addIncome = async (req, res, next) => {
     status: 'success',
     code: HttpCode.CREATED,
     newBalance: {
-      balance: user.balance
+      balance: user.balance,
     },
   });
 };
@@ -74,4 +74,24 @@ const deleteIncome = async (req, res, next) => {
   }
 };
 
-export { addIncome, deleteIncome, changeBalance };
+const deleteExpense = async (req, res, next) => {
+  const { id: expenseId } = req.params;
+  const { id: userId } = req.user;
+  const expense = await operationsService.deleteExpense(userId, expenseId);
+
+  if (!expense) {
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: 'error',
+      code: HttpCode.NOT_FOUND,
+      message: 'Not Found',
+    });
+  } else {
+    res.status(HttpCode.OK).json({
+      status: 'success',
+      code: HttpCode.OK,
+      user: { expense },
+    });
+  }
+};
+
+export { addIncome, deleteIncome, deleteExpense, changeBalance };
