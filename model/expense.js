@@ -11,8 +11,8 @@ const expenseSchema = new Schema(
             unique: false,
 
         },
-        time: {
-            type: String,
+        date: {
+            type: Number,
             required: true,
         },
         count: {
