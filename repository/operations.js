@@ -1,9 +1,11 @@
 import Income from '../model/income';
 import User from '../model/user';
 
-const createIncome = () => {
-  //to do Zmennn
+const createIncome = async (body) => {
+  const income = new Income(body);
+  return income
 };
+
 
 const updateBalance = async (id, body) => {
   return User.findOneAndUpdate({ _id: id }, { ...body }, { new: true });
