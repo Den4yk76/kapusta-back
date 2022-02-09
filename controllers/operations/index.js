@@ -8,7 +8,7 @@ const addIncome = async (req, res, next) => {
   const { count } = req.body;
   const { id } = req.user;
 
-  const currentBalance = await usersRepository.findById(id).balance;
+  let currentBalance = await usersRepository.findById(id).balance;
   currentBalance = currentBalance + count;
 
   const user = await repository.updateBalance(id, { balance: currentBalance });
@@ -24,7 +24,7 @@ const addIncome = async (req, res, next) => {
   //   });
   // }
 
-  const addIncomeObject = await operationsService.addIncome(id, req.body);
+  const addIncomeObject = await operationsService.addIncomeObject(id, req.body);
   if (!addIncomeObject) {
     return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
       status: 'error',

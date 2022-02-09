@@ -3,9 +3,9 @@ import logger from 'morgan';
 import cors from 'cors';
 import authRouter from './routes/api/auth';
 import operationsRouter from './routes/api/operations';
+import reportsRouter from './routes/api/reports';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './swagger.json';
-import { test } from './lib/arr';
 
 const app = express();
 
@@ -18,6 +18,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use('/api/users', authRouter);
 app.use('/api/operations', operationsRouter); // Denys изменил эту строчку. Было так - app.use('/api/income', operationsRouter);
+app.use('/api/reports', reportsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
@@ -27,15 +28,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-test.map(el => {
-  const time = Number(el.time);
-  const res = new Date(time);
-  const month = res.getMonth();
-  console.log(month);
-});
-
-const f = test.filter(el => {
-  const time = Number(el.time);
-  const res = new Date(time);
-});
 export default app;
