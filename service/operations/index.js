@@ -9,6 +9,16 @@ class OperationsService {
     return addIncomeObj
   }
 
+
+  async addExpenseObject(id, body) {
+
+    const addExpenseObj = await repositoryOperations.createExpense({
+      owner: id,
+      ...body
+    });
+    return addExpenseObj
+  }
+
   async deleteIncome(userId, incomeId) {
     const income = await repositoryOperations.deleteIncome(userId, incomeId);
     return income;
