@@ -3,6 +3,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import authRouter from './routes/api/auth';
 import operationsRouter from './routes/api/operations';
+import reportsRouter from './routes/api/reports';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './swagger.json';
 
@@ -17,6 +18,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use('/api/users', authRouter);
 app.use('/api/operations', operationsRouter); // Denys изменил эту строчку. Было так - app.use('/api/income', operationsRouter);
+app.use('/api/reports', reportsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
