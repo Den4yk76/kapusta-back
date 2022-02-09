@@ -16,7 +16,7 @@ const router = new Router();
 
 router.post('/income', guard, validateAddIncome, addIncome);
 router.patch('/balance', guard, validationUpdateBalance, changeBalance);
-router.delete('/delete-income/:id', guard, validateId, deleteIncome);
-router.delete('/delete-expense/:id', guard, validateId, deleteExpense);
+router.delete('/income/:id', guard, validateId, deleteIncome);
+router.delete('/expense/:id', guard, validateId, deleteExpense);
 
 export default router;
