@@ -8,28 +8,22 @@ const addIncome = async (req, res, next) => {
   const { count } = req.body;
   const { id } = req.user;
 
-  let currentBalance = await usersRepository.findById(id).balance;
-  currentBalance = currentBalance + count;
+  let currentBalance = await usersRepository.findById(id);
 
-  const user = await repository.updateBalance(id, { balance: currentBalance });
+  const newBalance = Number(currentBalance.balance) + Number(count);
+
+  const user = await repository.updateBalance(id, { balance: newBalance });
   if (!user) {
     return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
   }
-  // const newBalance = await repository.updateBalance(id, { count });
-  // if (!newBalance) {
-  //   return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-  //     status: 'error',
-  //     code: HttpCode.INTERNAL_SERVER_ERROR,
-  //     message: 'Unknown server error',
-  //   });
-  // }
 
   const addIncomeObject = await operationsService.addIncomeObject(id, req.body);
+  console.log("wtf", operationsService);
   if (!addIncomeObject) {
     return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
       status: 'error',
       code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: 'Unknown server error',
+      message: 'Unknown server error 32',
     });
   }
 

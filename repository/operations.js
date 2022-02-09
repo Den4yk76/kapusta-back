@@ -3,8 +3,9 @@ import Expense from '../model/expense';
 import User from '../model/user';
 
 const createIncome = async body => {
+  console.log('body', body);
   const income = new Income(body);
-  return income;
+  return await income.save();
 };
 
 const updateBalance = async (id, body) => {
