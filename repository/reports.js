@@ -11,4 +11,19 @@ const findExpense = async id => {
   return result;
 };
 
-export default { findIncome, findExpense };
+const findMonthTransactions = async (unixStart, unixEnd, category) => {
+  //TODO: fit find query below
+  // {$and : [{count: {$gte:500}}, {count: {$lte: 5000}}]}
+
+  if (category === 'incomes') {
+    const result = await Income.find();
+    return result;
+  }
+
+  if (category === 'expenses') {
+    const result = await Expense.find();
+    return result;
+  }
+};
+
+export default { findIncome, findExpense, findMonthTransactions };
