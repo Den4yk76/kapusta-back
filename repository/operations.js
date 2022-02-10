@@ -3,8 +3,16 @@ import Expense from '../model/expense';
 import User from '../model/user';
 
 const createIncome = async body => {
+
   const income = new Income(body);
-  return income;
+  return await income.save();
+};
+
+
+const createExpense = async body => {
+
+  const expense = new Expense(body);
+  return await expense.save();
 };
 
 const updateBalance = async (id, body) => {
@@ -27,4 +35,4 @@ const deleteExpense = (userId, expenseId) => {
   return result;
 };
 
-export default { createIncome, deleteIncome, deleteExpense, updateBalance };
+export default { createIncome, deleteIncome, deleteExpense, updateBalance, createExpense };

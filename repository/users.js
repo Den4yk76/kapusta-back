@@ -9,7 +9,7 @@ const findByEmail = async email => {
 };
 
 const create = async body => {
-  const user = new User(body);
+  const user = new User({ ...body, balance: 0 });
   return await user.save();
 };
 
