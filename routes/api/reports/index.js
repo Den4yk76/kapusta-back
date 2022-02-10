@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { HttpCode } from '../../../lib/constants';
 import guard from '../../../middlewares/guard';
 import {
   incomeReport,
@@ -7,12 +6,21 @@ import {
   monthTransactions,
   monthAmounts,
 } from '../../../controllers/reports';
+import {
+  validateMonthTransactionsSchema,
+  validateMonthAmountsSchema,
+} from './validation';
 
 const router = new Router();
 
 router.get('/income', guard, incomeReport);
 router.get('/expense', guard, expenseReport);
-router.post('/month-transactions', guard, monthTransactions); // Denys TODO: Validation and next steps inside methods
-router.post('/month-amounts', guard, monthAmounts); // Denys TODO: Validation
+router.post(
+  '/month-transactions',
+  guard,
+  validateMonthTransactionsSchema,
+  monthTransactions,
+);
+router.post('/month-amounts', guard, validateMonthAmountsSchema, monthAmounts);
 
 export default router;

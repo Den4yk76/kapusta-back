@@ -12,18 +12,38 @@ const findExpense = async id => {
 };
 
 const findMonthTransactions = async (unixStart, unixEnd, category) => {
-  //TODO: fit find query below
-  // {$and : [{count: {$gte:500}}, {count: {$lte: 5000}}]}
-
   if (category === 'incomes') {
-    const result = await Income.find();
+    const result = await Income.find({
+      $and: [
+        { date: { $gte: Number(unixStart) } },
+        { date: { $lte: Number(unixEnd) } },
+      ],
+    });
     return result;
   }
 
   if (category === 'expenses') {
-    const result = await Expense.find();
+    const result = await Expense.find({
+      $and: [{ date: { $gte: unixStart } }, { date: { $lte: unixEnd } }],
+    });
     return result;
   }
 };
 
-export default { findIncome, findExpense, findMonthTransactions };
+const findMonthAmounts = async (unixStart, unixEnd) => {
+  const incomes = await Income.find({
+    $and: [{ date: { $gte: unixStart } }, { date: { $lte: unixEnd } }],
+  });
+  const expenses = await Expense.find({
+    $and: [{ date: { $gte: unixStart } }, { date: { $lte: unixEnd } }],
+  });
+
+  return { incomes, expenses };
+};
+
+export default {
+  findIncome,
+  findExpense,
+  findMonthTransactions,
+  findMonthAmounts,
+};

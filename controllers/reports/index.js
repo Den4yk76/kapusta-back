@@ -49,9 +49,25 @@ export const monthTransactions = async (req, res, next) => {
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
-    message: {
-      transactions: result,
-    },
+    category,
+    transactions: result,
   });
 };
-export const monthAmounts = async (req, res, next) => {};
+export const monthAmounts = async (req, res, next) => {
+  const { unixStart, unixEnd } = req.body;
+  const result = await reportsService.getMonthAmounts(unixStart, unixEnd);
+
+  if (!result) {
+    return res.status(HttpCode.NOT_FOUND).json({
+      status: 'error',
+      code: HttpCode.NOT_FOUND,
+      message: 'Transactions not found',
+    });
+  }
+
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    result,
+  });
+};

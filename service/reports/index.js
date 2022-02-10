@@ -7,6 +7,33 @@ class ReportsService {
       unixEnd,
       category,
     );
+
+    for (const item of result) {
+      item['date'] = undefined;
+      item['owner'] = undefined;
+      item['id'] = undefined;
+    }
+
+    return result;
+  }
+
+  async getMonthAmounts(unixStart, unixEnd) {
+    const { incomes, expenses } = await repositoryReports.findMonthAmounts(
+      unixStart,
+      unixEnd,
+    );
+    let incomesAmount = 0;
+    let expensesAmount = 0;
+
+    for (const income of incomes) {
+      incomesAmount += Number(income.count);
+    }
+
+    for (const expense of expenses) {
+      expensesAmount += Number(expense.count);
+    }
+
+    return { incomesAmount, expensesAmount };
   }
 }
 
