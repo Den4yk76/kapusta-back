@@ -136,7 +136,7 @@
     },
     "/api/operations/income": {
       "post": {
-        "tags": ["Transactions"],
+        "tags": ["Operations"],
         "summary": "income transaction",
         "parameters": [],
         "security": [{ "Bearer": [] }],
