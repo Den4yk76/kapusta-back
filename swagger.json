@@ -136,8 +136,8 @@
     },
     "/api/operations/income": {
       "post": {
-        "tags": ["Transactions"],
-        "summary": "income transaction",
+        "tags": ["Operations"],
+        "summary": "Income transaction",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -163,7 +163,41 @@
           }
         }
       }
-    }
+    },
+    "/api/operations/expense":{
+      "post": {
+        "tags": ["Operations"],
+        "summary": "Expense transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseTransactionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/operations/income/:id":{},
+    "/api/operations/expense/:id":{},
+    "/api/reports/income":{},
+    "/api/reports/expense":{}
   },
   "components": {
     "schemas": {
@@ -186,16 +220,17 @@
       },
       "RegistrationResponse": {
         "type": "object",
+        "required": ["user", "status", "code"],
         "properties": {
           "status": {
             "type": "string",
-            "description": "request status",
-            "example": "success"
+            "description": "response status",
+            "example": "OK"
           },
           "code": {
-            "type": "integer",
-            "description": "status code",
-            "example": 201
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
           },
           "user": {
             "type": "object",
@@ -236,15 +271,26 @@
       },
       "LoginResponse": {
         "type": "object",
+        "required": ["user", "status", "code"],
         "properties": {
-          "token": {
+          "status": {
             "type": "string",
-            "description": "token",
-            "example": "jwtToken"
+            "description": "response status",
+            "example": "OK"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
           },
           "user": {
             "type": "object",
             "properties": {
+              "token": {
+                "type": "string",
+                "description": "token",
+                "example": "jwtToken"
+              },
               "email": {
                 "type": "string",
                 "description": "User's email",
@@ -255,10 +301,14 @@
           }
         },
         "example": {
-          "token": "jwtToken",
+          "status": "success",
+          "code": 201,
           "user": {
-            "email": "user@meta.ua"
-          }
+            "token": "jwtToken",
+            "user": {
+              "email": "user@meta.ua"
+            }
+          } 
         }
       },
       "LogoutRequest": {
@@ -290,12 +340,28 @@
       },
       "UpdateBalanceResponse": {
         "type": "object",
-        "required": ["balance"],
+        "required": ["user", "status", "code"],
         "properties": {
-          "balance": {
+          "status": {
             "type": "string",
-            "description": "User's balance",
-            "example": "10000"
+            "description": "response status ",
+            "example": "OK"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
+          },
+          "user": {
+            "type": "object",
+            "required": ["balance"],
+            "properties": {
+              "balance": {
+                "type": "number",
+                "description": "User's balance",
+                "example": 1000
+              }
+            }
           }
         },
         "example":{ 
@@ -306,7 +372,124 @@
           }
         }
       },
-      "IncomeTransactionRequest": {}
+      "IncomeTransactionRequest": {
+        "type": "object",
+        "required": ["date", "category", "count", "description"],
+        "properties": {
+          "date": {
+            "type": "integer",
+            "description": "date of creation",
+            "example": 1643857200
+          },
+          "category": {
+            "type": "string",
+            "description": "income category",
+            "example": "Salary"
+          },
+           "count": {
+            "type": "string",
+            "description": "income amount",
+            "example": "5000"
+          },
+           "description": {
+            "type": "string",
+            "description": "My salary",
+            "example": "My salary"
+          }
+        }
+      },
+      "IncomeTransactionResponse": {
+        "type": "object",
+        "required": ["newBalance", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status ",
+            "example": "CREATED"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "201"
+          },
+          "newBalance": {
+            "type": "object",
+            "properties": {
+              "balance": {
+                "type": "number",
+                "description": "response status ",
+                "example": 5000
+              }
+            }
+          }
+        },
+        "example":{ 
+          "status": "success",
+          "code": 201,
+          "user": {
+            "balance": 5000
+          }
+        }
+      },
+      "ExpenseTransactionRequest": {
+        "type": "object",
+        "required": ["date", "category", "count", "description"],
+        "properties": {
+          "date": {
+            "type": "integer",
+            "description": "date of creation",
+            "example": 1643857200
+          },
+          "category": {
+            "type": "string",
+            "description": "expense category",
+            "example": "Expense"
+          },
+           "count": {
+            "type": "string",
+            "description": "expense amount",
+            "example": "5000"
+          },
+           "description": {
+            "type": "string",
+            "description": "My expense",
+            "example": "My expense"
+          }
+        }
+      },
+      "ExpenseTransactionResponse": {
+        "type": "object",
+        "required": ["newBalance", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status ",
+            "example": "CREATED"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "201"
+          },
+          "newBalance": {
+            "type": "object",
+            "properties": {
+              "balance": {
+                "type": "number",
+                "description": "response status ",
+                "example": 2000
+              }
+            }
+          }
+      },
+      "example":{ 
+          "status": "success",
+          "code": 201,
+          "user": {
+            "balance": 2000
+          }
+      }
+      }
     },
     "securitySchemes": {
       "Bearer": {
