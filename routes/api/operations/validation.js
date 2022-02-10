@@ -5,15 +5,14 @@ import pkg from 'mongoose';
 const { Types } = pkg;
 
 const addIncomeSchema = Joi.object({
-
-  date: Joi.string().max(100).required(),
+  date: Joi.number().required(),
   count: Joi.string().max(100).required(),
   category: Joi.string().max(1000).required(),
   description: Joi.string().max(1000),
 });
 
 const updateBalanceSchema = Joi.object({
-  balance: Joi.string().required(),
+  balance: Joi.number().required(),
 });
 
 export const validateAddIncome = async (req, res, next) => {
