@@ -5,8 +5,16 @@ const reportsService = new ReportsService();
 
 export const incomeReport = async (req, res, next) => {
   const { id } = req.user;
-  const result = await repository.findIncome(id); // owner by user id?
-  // масив даних за останні пів року
+  const { unixStart, unixEnd } = req.query;
+  console.log('unixStart', unixStart);
+  const result = await repository.findIncome(id, unixStart, unixEnd);
+  if (!result) {
+    res.status(HttpCode.NOT_FOUND).json({
+      status: 'Not found',
+      code: HttpCode.NOT_FOUND,
+      message: 'transactions was not found',
+    });
+  }
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
@@ -18,8 +26,15 @@ export const incomeReport = async (req, res, next) => {
 
 export const expenseReport = async (req, res, next) => {
   const { id } = req.user;
-  const result = await repository.findExpense(id);
-  // масив даних за останні пів року
+  const { unixStart, unixEnd } = req.params;
+  const result = await repository.findExpense(id, unixStart, unixEnd);
+  if (!result) {
+    res.status(HttpCode.NOT_FOUND).json({
+      status: 'Not found',
+      code: HttpCode.NOT_FOUND,
+      message: 'transactions was not found',
+    });
+  }
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
@@ -53,6 +68,7 @@ export const monthTransactions = async (req, res, next) => {
     transactions: result,
   });
 };
+
 export const monthAmounts = async (req, res, next) => {
   const { unixStart, unixEnd } = req.body;
   const result = await reportsService.getMonthAmounts(unixStart, unixEnd);

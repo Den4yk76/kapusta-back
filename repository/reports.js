@@ -1,13 +1,19 @@
 import Income from '../model/income';
 import Expense from '../model/expense';
 
-const findIncome = async id => {
-  const result = await Income.find({ owner: id });
+const findIncome = async (id, start, end) => {
+  const result = await Income.find({
+    owner: id,
+    date: { $gt: start, $lt: end },
+  });
   return result;
 };
 
-const findExpense = async id => {
-  const result = await Expense.find({ owner: id });
+const findExpense = async (id, start, end) => {
+  const result = await Expense.find({
+    owner: id,
+    date: { $gt: start, $lt: end },
+  });
   return result;
 };
 
