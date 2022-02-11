@@ -1,4 +1,6 @@
 import User from '../model/user';
+import { OAuth2Client } from 'google-auth-library';
+const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
 const findById = async id => {
   return await User.findById(id);
@@ -14,7 +16,23 @@ const create = async body => {
 };
 
 const updateToken = async (id, token) => {
-  return await User.updateOne({ _id: id }, { token })
+  return await User.updateOne({ _id: id }, { token });
+};
+
+const googleLogin = async token => {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  const user = await findByEmail(payload.email);
+
+  if (!user) {
+    return await create({ email: payload.email, token });
+  } else {
+    await updateToken(user.id, token);
+    return user;
+  }
 };
 
 export default {
@@ -22,4 +40,5 @@ export default {
   findByEmail,
   create,
   updateToken,
+  googleLogin,
 };

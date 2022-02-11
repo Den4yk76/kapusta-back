@@ -2,6 +2,26 @@ import { HttpCode } from '../../lib/constants.js';
 import AuthService from '../../service/auth/';
 const authService = new AuthService();
 
+const googleLogin = async (req, res) => {
+  const { token } = req.body;
+  const user = await authService.googleLogin(token);
+
+  if (!user) {
+    return res.status(HttpCode.SERVICE_UNAVAILABLE).json({
+      status: 'error',
+      code: HttpCode.SERVICE_UNAVAILABLE,
+      message:
+        'Sorry, somthing went wrong. Try again later, or sign in with email and password',
+    });
+  }
+
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    user,
+  });
+};
+
 const registration = async (req, res, next) => {
   const { email } = req.body;
   const isUserExist = await authService.isUserExist(email);
@@ -39,6 +59,7 @@ const login = async (req, res, next) => {
     token: token,
     user: {
       email: user.email,
+      balance: user.balance,
     },
   };
   res.status(HttpCode.OK).json(response);
@@ -49,4 +70,4 @@ const logout = async (req, res, next) => {
   res.status(HttpCode.NO_CONTENT).json();
 };
 
-export { registration, login, logout };
+export { googleLogin, registration, login, logout };
