@@ -2,19 +2,19 @@ import Joi from 'joi';
 import { HttpCode } from '../../../lib/constants.js';
 
 const monthTransactionsSchema = Joi.object({
-  unixStart: Joi.string().length(10).required(),
-  unixEnd: Joi.string().length(10).required(),
+  unixStart: Joi.date().timestamp('unix').required(),
+  unixEnd: Joi.date().timestamp('unix').required(),
   category: Joi.string().valid('incomes', 'expenses').required(),
 });
 
 const monthAmountsSchema = Joi.object({
-  unixStart: Joi.string().length(10).required(),
-  unixEnd: Joi.string().length(10).required(),
+  unixStart: Joi.date().timestamp('unix').required(),
+  unixEnd: Joi.date().timestamp('unix').required(),
 });
 
 export const validateMonthTransactionsSchema = async (req, res, next) => {
   try {
-    await monthTransactionsSchema.validateAsync(req.body);
+    await monthTransactionsSchema.validateAsync(req.query);
   } catch (err) {
     return res
       .status(HttpCode.BAD_REQUEST)
@@ -25,7 +25,7 @@ export const validateMonthTransactionsSchema = async (req, res, next) => {
 
 export const validateMonthAmountsSchema = async (req, res, next) => {
   try {
-    await monthAmountsSchema.validateAsync(req.body);
+    await monthAmountsSchema.validateAsync(req.query);
   } catch (err) {
     return res
       .status(HttpCode.BAD_REQUEST)

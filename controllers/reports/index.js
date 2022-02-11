@@ -45,7 +45,8 @@ export const expenseReport = async (req, res, next) => {
 };
 
 export const monthTransactions = async (req, res, next) => {
-  const { unixStart, unixEnd, category } = req.body;
+  const { unixStart, unixEnd, category } = req.query;
+  console.log(unixStart, unixEnd, category);
 
   const result = await reportsService.getMonthTransactions(
     unixStart,
@@ -70,7 +71,7 @@ export const monthTransactions = async (req, res, next) => {
 };
 
 export const monthAmounts = async (req, res, next) => {
-  const { unixStart, unixEnd } = req.body;
+  const { unixStart, unixEnd } = req.query;
   const result = await reportsService.getMonthAmounts(unixStart, unixEnd);
 
   if (!result) {
