@@ -16,11 +16,12 @@ const router = new Router();
 router.get('/income', guard, incomeReport);
 router.get('/expense', guard, expenseReport);
 router.post(
+  // todo get method
   '/month-transactions',
   guard,
   validateMonthTransactionsSchema,
   monthTransactions,
 );
-router.post('/month-amounts', guard, validateMonthAmountsSchema, monthAmounts);
+router.get('/month-amounts', guard, validateMonthAmountsSchema, monthAmounts);
 
 export default router;

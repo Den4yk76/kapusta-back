@@ -54,7 +54,7 @@ export const monthTransactions = async (req, res, next) => {
   });
 };
 export const monthAmounts = async (req, res, next) => {
-  const { unixStart, unixEnd } = req.body;
+  const { unixStart, unixEnd } = req.query;
   const result = await reportsService.getMonthAmounts(unixStart, unixEnd);
 
   if (!result) {
