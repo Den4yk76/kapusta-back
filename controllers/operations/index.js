@@ -36,7 +36,6 @@ const addIncome = async (req, res, next) => {
   });
 };
 
-
 const addExpense = async (req, res, next) => {
   const { count } = req.body;
   const { id } = req.user;
@@ -50,7 +49,10 @@ const addExpense = async (req, res, next) => {
     return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
   }
 
-  const addExpenseObject = await operationsService.addExpenseObject(id, req.body);
+  const addExpenseObject = await operationsService.addExpenseObject(
+    id,
+    req.body,
+  );
 
   if (!addExpenseObject) {
     return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
@@ -72,6 +74,15 @@ const addExpense = async (req, res, next) => {
 const changeBalance = async (req, res, next) => {
   const { id } = req.user;
   const user = await repository.updateBalance(id, req.body);
+  if (!user) {
+    res.status(HttpCode.BAD_REQUEST).json({
+      status: 'bad request',
+      code: HttpCode.BAD_REQUEST,
+      user: {
+        balance: user.balance,
+      },
+    });
+  }
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
