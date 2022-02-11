@@ -15,8 +15,7 @@ const router = new Router();
 
 router.get('/income', guard, incomeReport);
 router.get('/expense', guard, expenseReport);
-router.post(
-  // todo get method
+router.get(
   '/month-transactions',
   guard,
   validateMonthTransactionsSchema,

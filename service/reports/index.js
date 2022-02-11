@@ -8,13 +8,15 @@ class ReportsService {
       category,
     );
 
-    for (const item of result) {
-      item['date'] = undefined;
-      item['owner'] = undefined;
-      item['id'] = undefined;
-    }
+    if (result) {
+      for (const item of result) {
+        item['date'] = undefined;
+        item['owner'] = undefined;
+        item['id'] = undefined;
+      }
 
-    return result;
+      return result;
+    }
   }
 
   async getMonthAmounts(unixStart, unixEnd) {
