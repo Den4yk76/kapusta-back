@@ -10,15 +10,13 @@ export const incomeReport = async (req, res, next) => {
     res.status(HttpCode.NOT_FOUND).json({
       status: 'Not found',
       code: HttpCode.NOT_FOUND,
-      message: 'transactions was not found',
+      message: 'Not found',
     });
   }
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
-    message: {
-      report: result,
-    },
+    transactions: result,
   });
 };
 
@@ -36,9 +34,7 @@ export const expenseReport = async (req, res, next) => {
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
-    message: {
-      report: result,
-    },
+    transactions: result,
   });
 };
 

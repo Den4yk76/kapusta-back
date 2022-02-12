@@ -1,22 +1,20 @@
 import repositoryOperations from '../../repository/operations';
+
 class OperationsService {
   async addIncomeObject(id, body) {
-
     const addIncomeObj = await repositoryOperations.createIncome({
       owner: id,
-      ...body
+      ...body,
     });
-    return addIncomeObj
+    return addIncomeObj;
   }
 
-
   async addExpenseObject(id, body) {
-
     const addExpenseObj = await repositoryOperations.createExpense({
       owner: id,
-      ...body
+      ...body,
     });
-    return addExpenseObj
+    return addExpenseObj;
   }
 
   async deleteIncome(userId, incomeId) {

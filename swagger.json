@@ -84,7 +84,17 @@
       "post": {
         "tags": ["User"],
         "summary": "User log out",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
@@ -108,7 +118,17 @@
       "patch": {
         "tags": ["User"],
         "summary": "Update user balance",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
@@ -138,7 +158,17 @@
       "post": {
         "tags": ["Operations"],
         "summary": "Income transaction",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
@@ -168,7 +198,17 @@
       "post": {
         "tags": ["Operations"],
         "summary": "Expense transaction",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
@@ -194,10 +234,206 @@
         }
       }
     },
-    "/api/operations/income/:id":{},
-    "/api/operations/expense/:id":{},
-    "/api/reports/income":{},
-    "/api/reports/expense":{}
+    "/api/operations/income/:id":{
+      "delete": {
+        "tags": ["Operations"],
+        "summary": "Delete income transaction by id",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteIncomeTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteIncomeTransactionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/operations/expense/:id":{
+      "delete": {
+        "tags": ["Operations"],
+        "summary": "Delete expense transaction by id",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteExpenseTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteExpenseTransactionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/income":{
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Income statement for the last six months",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeReportsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/expense":{
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Expense statement for the last six months",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseReportsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/month-transactions": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthTransactionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/month-amounts": {
+       "get": {
+        "tags": ["Reports"],
+        "summary": "",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthAmountsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -481,15 +717,238 @@
               }
             }
           }
-      },
-      "example":{ 
+        },
+        "example": { 
           "status": "success",
           "code": 201,
           "user": {
             "balance": 2000
           }
-      }
-      }
+        }
+      },
+      "DeleteIncomeTransactionRequest": {
+        "type": "object",
+        "required": ["userId", "incomeId"],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User id",
+            "example": "1643857200"
+          },
+          "incomeId": {
+            "type": "string",
+            "description": "Id of the transaction to be deleted",
+            "example": "1643857200"
+          }
+        }
+      },
+      "DeleteIncomeTransactionResponse": {
+        "type": "object",
+        "required": ["transaction", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status ",
+            "example": "OK"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
+          },
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "transaction id",
+                "example": "476908789498"
+              },
+              "count": {
+                "type": "string",
+                "description": "transaction amount",
+                "example": "5000"
+              },
+              "category": {
+                "type": "string",
+                "description": "transaction category",
+                "example": "Salary"
+              }
+            }
+          }
+        },
+        "example": { 
+          "status": "success",
+          "code": 200,
+          "transaction": {
+            "id": "478698437978",
+            "category": "Salary",
+            "count": 10000
+          }
+        }
+      },
+      "DeleteExpenseTransactionRequest": {
+        "type": "object",
+        "required": ["userId", "incomeId"],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User id",
+            "example": "1643857200"
+          },
+          "incomeId": {
+            "type": "string",
+            "description": "Id of the transaction to be deleted",
+            "example": "1643857200"
+          }
+        }
+      },
+      "DeleteExpenseTransactionResponse": {
+        "type": "object",
+        "required": ["transaction", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status ",
+            "example": "OK"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
+          },
+          "transaction": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "transaction id",
+                "example": "476908789498"
+              },
+              "count": {
+                "type": "string",
+                "description": "transaction amount",
+                "example": "5000"
+              },
+              "category": {
+                "type": "string",
+                "description": "transaction category",
+                "example": "Salary"
+              }
+            }
+          }
+        }
+      },
+      "IncomeReportsResponse": {
+        "type": "object",
+        "required": ["transactions", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status",
+            "example": "OK"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "type": "string",
+                  "description": "The owner of the transaction",
+                  "example": "620512671258796f09af05c1"
+                },
+                "date": {
+                  "type": "number",
+                  "description": "User's id",
+                  "example": 1643857150
+                },
+                "count": {
+                  "type": "number",
+                  "description": "User's id",
+                  "example": 5000
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Category of transaction",
+                  "example": "Salary"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "transaction description",
+                  "example": "My salary"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "User's id",
+                  "example": "62051ca19a97ab4c9bb9c2fa"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ExpenseReportsResponse": {
+        "type": "object",
+        "required": ["transactions", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status",
+            "example": "OK"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "type": "string",
+                  "description": "The owner of the transaction",
+                  "example": "620512671258796f09af05c1"
+                },
+                "date": {
+                  "type": "number",
+                  "description": "User's id",
+                  "example": 1643857150
+                },
+                "count": {
+                  "type": "number",
+                  "description": "User's id",
+                  "example": 5000
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Category of transaction",
+                  "example": "Salary"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "transaction description",
+                  "example": "My salary"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "User's id",
+                  "example": "62051ca19a97ab4c9bb9c2fa"
+                }
+              }
+            }
+          }
+        }
+      },
+      "MonthTransactionsResponse": {},
+      "MonthAmountsResponse": {}
     },
     "securitySchemes": {
       "Bearer": {

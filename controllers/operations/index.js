@@ -107,7 +107,7 @@ const deleteIncome = async (req, res, next) => {
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      user: { income },
+      transaction: { income },
     });
   }
 };
@@ -127,7 +127,7 @@ const deleteExpense = async (req, res, next) => {
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      user: { expense },
+      transaction: { expense },
     });
   }
 };
