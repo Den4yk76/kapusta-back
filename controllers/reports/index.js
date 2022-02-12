@@ -1,13 +1,11 @@
 import { HttpCode } from '../../lib/constants.js';
-import repository from '../../repository/reports';
 import ReportsService from '../../service/reports';
 const reportsService = new ReportsService();
 
 export const incomeReport = async (req, res, next) => {
   const { id } = req.user;
   const { unixStart, unixEnd } = req.query;
-  console.log('unixStart', unixStart);
-  const result = await repository.findIncome(id, unixStart, unixEnd);
+  const result = await reportsService.getIncomeReport(id, unixStart, unixEnd);
   if (!result) {
     res.status(HttpCode.NOT_FOUND).json({
       status: 'Not found',
@@ -27,7 +25,7 @@ export const incomeReport = async (req, res, next) => {
 export const expenseReport = async (req, res, next) => {
   const { id } = req.user;
   const { unixStart, unixEnd } = req.params;
-  const result = await repository.findExpense(id, unixStart, unixEnd);
+  const result = await reportsService.getExpenseReport(id, unixStart, unixEnd);
   if (!result) {
     res.status(HttpCode.NOT_FOUND).json({
       status: 'Not found',

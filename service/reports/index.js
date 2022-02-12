@@ -37,6 +37,16 @@ class ReportsService {
 
     return { incomesAmount, expensesAmount };
   }
+
+  async getIncomeReport(id, unixStart, unixEnd) {
+    const result = await repositoryReports.findIncome(id, unixStart, unixEnd);
+    return result;
+  }
+
+  async getExpenseReport(id, unixStart, unixEnd) {
+    const result = await repositoryReports.findExpense(id, unixStart, unixEnd);
+    return result;
+  }
 }
 
 export default ReportsService;

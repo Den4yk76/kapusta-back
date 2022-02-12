@@ -7,7 +7,7 @@ const monthTransactionsSchema = Joi.object({
   category: Joi.string().valid('incomes', 'expenses').required(),
 });
 
-const monthAmountsSchema = Joi.object({
+const queryStringSchema = Joi.object({
   unixStart: Joi.date().timestamp('unix').required(),
   unixEnd: Joi.date().timestamp('unix').required(),
 });
@@ -23,9 +23,9 @@ export const validateMonthTransactionsSchema = async (req, res, next) => {
   next();
 };
 
-export const validateMonthAmountsSchema = async (req, res, next) => {
+export const queryStringValidation = async (req, res, next) => {
   try {
-    await monthAmountsSchema.validateAsync(req.query);
+    await queryStringSchema.validateAsync(req.query);
   } catch (err) {
     return res
       .status(HttpCode.BAD_REQUEST)
