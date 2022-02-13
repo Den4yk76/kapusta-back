@@ -74,13 +74,7 @@ const changeBalance = async (req, res, next) => {
   const { id } = req.user;
   const user = await repository.updateBalance(id, req.body);
   if (!user) {
-    res.status(HttpCode.BAD_REQUEST).json({
-      status: 'bad request',
-      code: HttpCode.BAD_REQUEST,
-      user: {
-        balance: user.balance,
-      },
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
   res.status(HttpCode.OK).json({
     status: 'success',
