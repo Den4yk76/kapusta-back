@@ -1,5 +1,6 @@
 import { HttpCode } from '../../lib/constants.js';
 import AuthService from '../../service/auth/';
+import { CustomError } from '../../lib/custom-error';
 const authService = new AuthService();
 
 const googleLogin = async (req, res) => {
@@ -7,12 +8,10 @@ const googleLogin = async (req, res) => {
   const user = await authService.googleLogin(token);
 
   if (!user) {
-    return res.status(HttpCode.SERVICE_UNAVAILABLE).json({
-      status: 'error',
-      code: HttpCode.SERVICE_UNAVAILABLE,
-      message:
-        'Sorry, somthing went wrong. Try again later, or sign in with email and password',
-    });
+    throw new CustomError(
+      HttpCode.SERVICE_UNAVAILABLE,
+      'Sorry, somthing went wrong. Try again later, or sign in with email and password',
+    );
   }
 
   res.status(HttpCode.OK).json({
@@ -26,11 +25,7 @@ const registration = async (req, res, next) => {
   const { email } = req.body;
   const isUserExist = await authService.isUserExist(email);
   if (isUserExist) {
-    return res.status(HttpCode.CONFLICT).json({
-      status: 'error',
-      code: HttpCode.CONFLICT,
-      message: 'Email in use',
-    });
+    throw new CustomError(HttpCode.CONFLICT, 'Email in use');
   }
 
   const data = await authService.create(req.body);
@@ -47,9 +42,7 @@ const login = async (req, res, next) => {
   const user = await authService.getUser(email, password);
 
   if (!user) {
-    return res
-      .status(HttpCode.UNAUTHORIZED)
-      .json({ message: 'Email or password is wrong' });
+    throw new CustomError(HttpCode.UNAUTHORIZED, 'Email or password is wrong');
   }
 
   const token = await authService.getToken(user);

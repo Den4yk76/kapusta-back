@@ -6,6 +6,7 @@ import operationsRouter from './routes/api/operations';
 import reportsRouter from './routes/api/reports';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './swagger.json';
+import { HttpCode } from './lib/constants';
 
 const app = express();
 
@@ -21,11 +22,17 @@ app.use('/api/operations', operationsRouter);
 app.use('/api/reports', reportsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' });
+  res
+    .status(HttpCode.NOT_FOUND)
+    .json({ status: 'error', code: HttpCode.NOT_FOUND, message: 'Not found' });
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const statusCode = err.status || HttpCode.INTERNAL_SERVER_ERROR;
+  const status =
+    statusCode === HttpCode.INTERNAL_SERVER_ERROR ? 'fail' : 'error';
+
+  res.status().json({ status: status, code: statusCode, message: err.message });
 });
 
 export default app;

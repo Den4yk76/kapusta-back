@@ -2,6 +2,7 @@ import { HttpCode } from '../../lib/constants.js';
 import OperationsService from '../../service/operations/';
 import repository from '../../repository/operations';
 import usersRepository from '../../repository/users';
+import { CustomError } from '../../lib/custom-error';
 const operationsService = new OperationsService();
 
 const addIncome = async (req, res, next) => {
@@ -14,17 +15,16 @@ const addIncome = async (req, res, next) => {
 
   const user = await repository.updateBalance(id, { balance: newBalance });
   if (!user) {
-    return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
 
   const addIncomeObject = await operationsService.addIncomeObject(id, req.body);
 
   if (!addIncomeObject) {
-    return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-      status: 'error',
-      code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: 'Unknown server error',
-    });
+    throw new CustomError(
+      HttpCode.INTERNAL_SERVER_ERROR,
+      'Unknown server error',
+    );
   }
 
   res.status(HttpCode.CREATED).json({
@@ -46,7 +46,7 @@ const addExpense = async (req, res, next) => {
 
   const user = await repository.updateBalance(id, { balance: newBalance });
   if (!user) {
-    return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
 
   const addExpenseObject = await operationsService.addExpenseObject(
@@ -55,11 +55,10 @@ const addExpense = async (req, res, next) => {
   );
 
   if (!addExpenseObject) {
-    return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-      status: 'error',
-      code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: 'Unknown server error',
-    });
+    throw new CustomError(
+      HttpCode.INTERNAL_SERVER_ERROR,
+      'Unknown server error',
+    );
   }
 
   res.status(HttpCode.CREATED).json({
@@ -98,11 +97,7 @@ const deleteIncome = async (req, res, next) => {
   const income = await operationsService.deleteIncome(userId, incomeId);
 
   if (!income) {
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not Found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   } else {
     res.status(HttpCode.OK).json({
       status: 'success',
@@ -118,11 +113,7 @@ const deleteExpense = async (req, res, next) => {
   const expense = await operationsService.deleteExpense(userId, expenseId);
 
   if (!expense) {
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not Found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   } else {
     res.status(HttpCode.OK).json({
       status: 'success',
