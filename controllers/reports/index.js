@@ -1,5 +1,6 @@
 import { HttpCode } from '../../lib/constants.js';
 import ReportsService from '../../service/reports';
+import { CustomError } from '../../lib/custom-error';
 const reportsService = new ReportsService();
 
 export const incomeReport = async (req, res, next) => {
@@ -7,11 +8,7 @@ export const incomeReport = async (req, res, next) => {
   const { unixStart, unixEnd } = req.query;
   const result = await reportsService.getIncomeReport(id, unixStart, unixEnd);
   if (!result) {
-    res.status(HttpCode.NOT_FOUND).json({
-      status: 'Not found',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
   res.status(HttpCode.OK).json({
     status: 'success',
@@ -25,11 +22,7 @@ export const expenseReport = async (req, res, next) => {
   const { unixStart, unixEnd } = req.params;
   const result = await reportsService.getExpenseReport(id, unixStart, unixEnd);
   if (!result) {
-    res.status(HttpCode.NOT_FOUND).json({
-      status: 'Not found',
-      code: HttpCode.NOT_FOUND,
-      message: 'transactions was not found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
   res.status(HttpCode.OK).json({
     status: 'success',
@@ -40,7 +33,6 @@ export const expenseReport = async (req, res, next) => {
 
 export const monthTransactions = async (req, res, next) => {
   const { unixStart, unixEnd, category } = req.query;
-  console.log(unixStart, unixEnd, category);
 
   const result = await reportsService.getMonthTransactions(
     unixStart,
@@ -49,11 +41,7 @@ export const monthTransactions = async (req, res, next) => {
   );
 
   if (!result) {
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Transactions not found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
 
   res.status(HttpCode.OK).json({
@@ -69,11 +57,7 @@ export const monthAmounts = async (req, res, next) => {
   const result = await reportsService.getMonthAmounts(unixStart, unixEnd);
 
   if (!result) {
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Transactions not found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
 
   res.status(HttpCode.OK).json({
