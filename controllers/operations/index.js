@@ -2,6 +2,7 @@ import { HttpCode } from '../../lib/constants.js';
 import OperationsService from '../../service/operations/';
 import repository from '../../repository/operations';
 import usersRepository from '../../repository/users';
+import { CustomError } from '../../lib/custom-error';
 const operationsService = new OperationsService();
 
 const addIncome = async (req, res, next) => {
@@ -14,17 +15,16 @@ const addIncome = async (req, res, next) => {
 
   const user = await repository.updateBalance(id, { balance: newBalance });
   if (!user) {
-    return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
 
   const addIncomeObject = await operationsService.addIncomeObject(id, req.body);
 
   if (!addIncomeObject) {
-    return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-      status: 'error',
-      code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: 'Unknown server error',
-    });
+    throw new CustomError(
+      HttpCode.INTERNAL_SERVER_ERROR,
+      'Unknown server error',
+    );
   }
 
   res.status(HttpCode.CREATED).json({
@@ -36,7 +36,6 @@ const addIncome = async (req, res, next) => {
   });
 };
 
-
 const addExpense = async (req, res, next) => {
   const { count } = req.body;
   const { id } = req.user;
@@ -47,17 +46,19 @@ const addExpense = async (req, res, next) => {
 
   const user = await repository.updateBalance(id, { balance: newBalance });
   if (!user) {
-    return res.status(HttpCode.NOT_FOUND).json({ message: 'Not found' });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   }
 
-  const addExpenseObject = await operationsService.addExpenseObject(id, req.body);
+  const addExpenseObject = await operationsService.addExpenseObject(
+    id,
+    req.body,
+  );
 
   if (!addExpenseObject) {
-    return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({
-      status: 'error',
-      code: HttpCode.INTERNAL_SERVER_ERROR,
-      message: 'Unknown server error',
-    });
+    throw new CustomError(
+      HttpCode.INTERNAL_SERVER_ERROR,
+      'Unknown server error',
+    );
   }
 
   res.status(HttpCode.CREATED).json({
@@ -72,6 +73,9 @@ const addExpense = async (req, res, next) => {
 const changeBalance = async (req, res, next) => {
   const { id } = req.user;
   const user = await repository.updateBalance(id, req.body);
+  if (!user) {
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
+  }
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
@@ -87,16 +91,20 @@ const deleteIncome = async (req, res, next) => {
   const income = await operationsService.deleteIncome(userId, incomeId);
 
   if (!income) {
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not Found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   } else {
+    let currentUser = await usersRepository.findById(userId);
+    const newBalance = Number(currentUser.balance) - Number(income.count);
+
+    const user = await repository.updateBalance(userId, {
+      balance: newBalance,
+    });
+
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      user: { income },
+      deletedIncome: income,
+      newBalance: user.balance,
     });
   }
 };
@@ -107,16 +115,20 @@ const deleteExpense = async (req, res, next) => {
   const expense = await operationsService.deleteExpense(userId, expenseId);
 
   if (!expense) {
-    return res.status(HttpCode.NOT_FOUND).json({
-      status: 'error',
-      code: HttpCode.NOT_FOUND,
-      message: 'Not Found',
-    });
+    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   } else {
+    let currentUser = await usersRepository.findById(userId);
+    const newBalance = Number(currentUser.balance) + Number(expense.count);
+
+    const user = await repository.updateBalance(userId, {
+      balance: newBalance,
+    });
+
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      user: { expense },
+      deletedExpense: expense,
+      newBalance: user.balance,
     });
   }
 };

@@ -1,16 +1,31 @@
 import { HttpCode } from '../../lib/constants.js';
 import AuthService from '../../service/auth/';
+import { CustomError } from '../../lib/custom-error';
 const authService = new AuthService();
+
+const googleLogin = async (req, res) => {
+  const { token } = req.body;
+  const user = await authService.googleLogin(token);
+
+  if (!user) {
+    throw new CustomError(
+      HttpCode.SERVICE_UNAVAILABLE,
+      'Sorry, somthing went wrong. Try again later, or sign in with email and password',
+    );
+  }
+
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    user,
+  });
+};
 
 const registration = async (req, res, next) => {
   const { email } = req.body;
   const isUserExist = await authService.isUserExist(email);
   if (isUserExist) {
-    return res.status(HttpCode.CONFLICT).json({
-      status: 'error',
-      code: HttpCode.CONFLICT,
-      message: 'Email in use',
-    });
+    throw new CustomError(HttpCode.CONFLICT, 'Email in use');
   }
 
   const data = await authService.create(req.body);
@@ -27,9 +42,7 @@ const login = async (req, res, next) => {
   const user = await authService.getUser(email, password);
 
   if (!user) {
-    return res
-      .status(HttpCode.UNAUTHORIZED)
-      .json({ message: 'Email or password is wrong' });
+    throw new CustomError(HttpCode.UNAUTHORIZED, 'Email or password is wrong');
   }
 
   const token = await authService.getToken(user);
@@ -39,6 +52,7 @@ const login = async (req, res, next) => {
     token: token,
     user: {
       email: user.email,
+      balance: user.balance,
     },
   };
   res.status(HttpCode.OK).json(response);
@@ -49,4 +63,4 @@ const logout = async (req, res, next) => {
   res.status(HttpCode.NO_CONTENT).json();
 };
 
-export { registration, login, logout };
+export { googleLogin, registration, login, logout };
