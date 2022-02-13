@@ -93,10 +93,18 @@ const deleteIncome = async (req, res, next) => {
   if (!income) {
     throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   } else {
+    let currentUser = await usersRepository.findById(userId);
+    const newBalance = Number(currentUser.balance) - Number(income.count);
+
+    const user = await repository.updateBalance(userId, {
+      balance: newBalance,
+    });
+
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      transaction: { income },
+      deletedIncome: income,
+      newBalance: user.balance,
     });
   }
 };
@@ -109,10 +117,18 @@ const deleteExpense = async (req, res, next) => {
   if (!expense) {
     throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
   } else {
+    let currentUser = await usersRepository.findById(userId);
+    const newBalance = Number(currentUser.balance) + Number(expense.count);
+
+    const user = await repository.updateBalance(userId, {
+      balance: newBalance,
+    });
+
     res.status(HttpCode.OK).json({
       status: 'success',
       code: HttpCode.OK,
-      transaction: { expense },
+      deletedExpense: expense,
+      newBalance: user.balance,
     });
   }
 };
