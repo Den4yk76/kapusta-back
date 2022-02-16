@@ -4,8 +4,8 @@ import { CustomError } from '../../lib/custom-error';
 const authService = new AuthService();
 
 const googleLogin = async (req, res) => {
-  const { token } = req.body;
-  const user = await authService.googleLogin(token);
+  const { token: googleToken } = req.body;
+  const user = await authService.googleLogin(googleToken);
 
   if (!user) {
     throw new CustomError(
@@ -14,10 +14,17 @@ const googleLogin = async (req, res) => {
     );
   }
 
+  const token = await authService.getToken(user);
+  await authService.setToken(user.id, token);
+
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
-    user,
+    token,
+    user: {
+      email: user.email,
+      balance: user.balance,
+    },
   });
 };
 
