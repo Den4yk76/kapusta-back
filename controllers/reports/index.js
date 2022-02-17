@@ -32,8 +32,9 @@ export const expenseReport = async (req, res, next) => {
 };
 
 export const monthAmounts = async (req, res, next) => {
+  const { id } = req.user;
   const { unixStart, unixEnd } = req.query;
-  const result = await reportsService.getMonthAmounts(unixStart, unixEnd);
+  const result = await reportsService.getMonthAmounts(id, unixStart, unixEnd);
 
   if (!result) {
     throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
