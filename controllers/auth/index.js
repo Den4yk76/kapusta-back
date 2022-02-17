@@ -71,12 +71,12 @@ const logout = async (req, res, next) => {
 };
 
 const currentUser = async (req, res, next) => {
-  const { email } = req.user;
+  const user = req.user;
 
   res.status(HttpCode.OK).json({
     status: 'success',
     code: HttpCode.OK,
-    user: { email },
+    user,
   });
 };
 
