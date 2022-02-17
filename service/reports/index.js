@@ -1,8 +1,9 @@
 import repositoryReports from '../../repository/reports';
 
 class ReportsService {
-  async getMonthAmounts(unixStart, unixEnd) {
+  async getMonthAmounts(id, unixStart, unixEnd) {
     const { incomes, expenses } = await repositoryReports.findMonthAmounts(
+      id,
       unixStart,
       unixEnd,
     );
