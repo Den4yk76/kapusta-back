@@ -70,4 +70,24 @@ const logout = async (req, res, next) => {
   res.status(HttpCode.NO_CONTENT).json();
 };
 
-export { googleLogin, registration, login, logout };
+const getCurrentUser = async (req, res, next) => {
+  console.log('user by token from contr');
+  const user = await authService.getUserByToken(req.user.token);
+  if (!user) {
+    return res.status(HttpCode.UNAUTHORIZED).json({
+      Status: 'Unauthorized',
+      code: HttpCode.UNAUTHORIZED,
+      message: {
+        message: 'Not authorized',
+      },
+    });
+  }
+  return res.status(HttpCode.OK).json({
+    status: 'OK',
+    code: HttpCode.OK,
+    user: {
+      email: req.user.email,
+    },
+  });
+};
+export { googleLogin, registration, login, logout, getCurrentUser };

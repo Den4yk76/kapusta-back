@@ -35,10 +35,16 @@ const googleLogin = async token => {
   }
 };
 
+const getUserByToken = async token => {
+  const user = await User.findOne({ token });
+  return user;
+};
+
 export default {
   findById,
   findByEmail,
   create,
   updateToken,
   googleLogin,
+  getUserByToken,
 };

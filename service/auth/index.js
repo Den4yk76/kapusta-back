@@ -36,6 +36,11 @@ class AuthService {
   async googleLogin(token) {
     return await repositoryUsers.googleLogin(token);
   }
-}
 
+  // new
+  async getUserByToken(token) {
+    console.log('user by token from serv');
+    return await repositoryUsers.getUserByToken(token);
+  }
+}
 export default AuthService;
