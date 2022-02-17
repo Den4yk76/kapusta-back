@@ -28,9 +28,9 @@ const googleLogin = async token => {
   const user = await findByEmail(payload.email);
 
   if (!user) {
-    return await create({ email: payload.email, token });
+    const user = await create({ email: payload.email });
+    return user;
   } else {
-    await updateToken(user.id, token);
     return user;
   }
 };

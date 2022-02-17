@@ -31,27 +31,6 @@ export const expenseReport = async (req, res, next) => {
   });
 };
 
-export const monthTransactions = async (req, res, next) => {
-  const { unixStart, unixEnd, category } = req.query;
-
-  const result = await reportsService.getMonthTransactions(
-    unixStart,
-    unixEnd,
-    category,
-  );
-
-  if (!result) {
-    throw new CustomError(HttpCode.NOT_FOUND, 'Not found');
-  }
-
-  res.status(HttpCode.OK).json({
-    status: 'success',
-    code: HttpCode.OK,
-    category,
-    transactions: result,
-  });
-};
-
 export const monthAmounts = async (req, res, next) => {
   const { unixStart, unixEnd } = req.query;
   const result = await reportsService.getMonthAmounts(unixStart, unixEnd);

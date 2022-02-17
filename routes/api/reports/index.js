@@ -3,7 +3,6 @@ import guard from '../../../middlewares/guard';
 import {
   incomeReport,
   expenseReport,
-  monthTransactions,
   monthAmounts,
 } from '../../../controllers/reports';
 import {
@@ -21,12 +20,7 @@ router.get(
   queryStringValidation,
   errorWrapper(expenseReport),
 );
-router.get(
-  '/month-transactions',
-  guard,
-  validateMonthTransactionsSchema,
-  errorWrapper(monthTransactions),
-);
+
 router.get(
   '/month-amounts',
   guard,
