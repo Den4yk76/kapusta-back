@@ -70,4 +70,14 @@ const logout = async (req, res, next) => {
   res.status(HttpCode.NO_CONTENT).json();
 };
 
-export { googleLogin, registration, login, logout };
+const currentUser = async (req, res, next) => {
+  const { email } = req.user;
+
+  res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    user: { email },
+  });
+};
+
+export { googleLogin, registration, login, logout, currentUser };
