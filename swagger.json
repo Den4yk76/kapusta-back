@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3001",  "description": "API base URL" }],
+  "servers": [{ "url": "https://kapusta-back-end.herokuapp.com",  "description": "API base URL" }],
   "paths": {
     "/api/users/signup": {
       "post": {
@@ -146,7 +146,7 @@
     },
     "/api/operations/balance": {
       "patch": {
-        "tags": ["User"],
+        "tags": ["Operations"],
         "summary": "Update user balance",
         "parameters": [
           {
