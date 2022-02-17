@@ -80,6 +80,36 @@
         }
       }
     },
+    "/api/users/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get current user",
+        "parameters": [
+          {
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "Token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/logout": {
       "post": {
         "tags": ["User"],
@@ -110,7 +140,7 @@
           "204": {
             "description": "Success",
             "content": {}
-          }
+            }
         }
       }
     },
@@ -545,6 +575,40 @@
               "email": "user@meta.ua"
             }
           } 
+        }
+      },
+      "CurrentResponse":{
+        "type": "object",
+        "required": ["user", "status", "code"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "response status",
+            "example": "Success"
+          },
+          "code": {
+            "type": "string",
+            "description": "response status code",
+            "example": "200"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email",
+                "example": "user@meta.ua"
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "user": {
+            "email": "test@meta.ua"
+          }
         }
       },
       "LogoutRequest": {
