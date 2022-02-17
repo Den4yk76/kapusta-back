@@ -17,12 +17,14 @@ const findExpense = async (id, start, end) => {
   return result;
 };
 
-const findMonthAmounts = async (unixStart, unixEnd) => {
+const findMonthAmounts = async (id, unixStart, unixEnd) => {
   const incomes = await Income.find({
-    $and: [{ date: { $gte: unixStart } }, { date: { $lte: unixEnd } }],
+    owner: id,
+    date: { $gt: unixStart, $lt: unixEnd },
   });
   const expenses = await Expense.find({
-    $and: [{ date: { $gte: unixStart } }, { date: { $lte: unixEnd } }],
+    owner: id,
+    date: { $gt: unixStart, $lt: unixEnd },
   });
 
   return { incomes, expenses };
