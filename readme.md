@@ -1,6 +1,5 @@
-Как посмотреть swagger:
+How to view Swagger:
 
-1. запустить сервер npm run start:dev
-2. открыть http://localhost:3001/api-docs в браузере
+2. Start the server with npm run start
 
-test heroku push
+2. Open http://localhost:3001/api-docs in your browser.
